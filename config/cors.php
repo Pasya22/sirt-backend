@@ -6,7 +6,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        env('FRONTEND_URL', 'http://10.214.3.60:5433'),
+        env('FRONTEND_URL', 'https://sirutawa.netlify.app/'),
     ],
 
     'allowed_origins_patterns' => [],

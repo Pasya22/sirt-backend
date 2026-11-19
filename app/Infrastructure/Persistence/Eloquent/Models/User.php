@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Infrastructure\Persistence\Eloquent\Models;
 
 use App\Domain\IdentityAccess\Enums\Aksi;
@@ -14,15 +13,25 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $fillable = ['nama', 'email', 'password', 'role', 'status', 'izin'];
+    protected $fillable = [
+        'nama', 'email', 'password', 'role',
+        'rt', 'rw', 'desa', 'kode_pos', 'kecamatan', 'kabupaten', 'provinsi',
+        'status', 'izin',
+    ];
+
     protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
             'password' => 'hashed',
-            'izin' => 'array',
+            'izin'     => 'array',
         ];
+    }
+
+    public function isTingkatRw(): bool
+    {
+        return $this->role === Role::KETUA_RW->value || (empty($this->rt) && ! empty($this->rw));
     }
 
     public function getIzinMatrix(): IzinMatrix

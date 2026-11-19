@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Application\IdentityAccess\UseCases;
 
 use App\Domain\IdentityAccess\Enums\Role;
@@ -22,16 +21,42 @@ final readonly class HapusPenggunaUseCase
         }
 
         $target = $this->users->findById($targetId);
-        if (!$target) {
+        if (! $target) {
             throw new DomainException('Pengguna tidak ditemukan.');
         }
 
+        // Cek jumlah Ketua RT aktif di wilayah yang sama (desa + rw + rt)
         if (
             $target->role === Role::KETUA_RT->value &&
-            $target->status === 'Aktif' &&
-            $this->users->countActiveKetuaRt() <= 1
+            $target->status === 'Aktif'
         ) {
-            throw new DomainException('Harus ada minimal satu Ketua RT aktif.');
+            $jumlahKetuaRtWilayah = User::where('role', Role::KETUA_RT->value)
+                ->where('status', 'Aktif')
+                ->where('desa', $target->desa)
+                ->where('rw', $target->rw)
+                ->where('rt', $target->rt)
+                ->count();
+
+            if ($jumlahKetuaRtWilayah <= 1) {
+                throw new DomainException('Harus ada minimal satu Ketua RT aktif di wilayah ini.');
+            }
+        }
+
+// Cek jumlah Ketua RW aktif di wilayah yang sama (desa + rw)
+        if (
+            $target->role === Role::KETUA_RW->value &&
+            $target->status === 'Aktif' &&
+            ! empty($target->rw)
+        ) {
+            $jumlahKetuaRwWilayah = User::where('role', Role::KETUA_RW->value)
+                ->where('status', 'Aktif')
+                ->where('desa', $target->desa)
+                ->where('rw', $target->rw)
+                ->count();
+
+            if ($jumlahKetuaRwWilayah <= 1) {
+                throw new DomainException('Harus ada minimal satu Ketua RW aktif di wilayah ini.');
+            }
         }
 
         $nama = $target->nama;

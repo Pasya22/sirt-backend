@@ -26,7 +26,6 @@ final class PenggunaController extends Controller
         $actor = $request->user();
         $list = $this->users->all();
 
-        // Sembunyikan akun diri sendiri dari list kecuali role Admin
         if ($actor && $actor->role !== Role::ADMIN->value) {
             $list = $list->reject(fn($u) => $u->id === $actor->id)->values();
         }
@@ -40,6 +39,13 @@ final class PenggunaController extends Controller
             'nama' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email'],
             'role' => ['required', Rule::in(array_column(Role::cases(), 'value'))],
+            'rt' => ['nullable', 'string', 'max:5'],
+            'rw' => ['nullable', 'string', 'max:5'],
+            'desa' => ['nullable', 'string', 'max:100'],
+            'kode_pos' => ['nullable', 'string', 'max:10'],
+            'kecamatan' => ['nullable', 'string', 'max:100'],
+            'kabupaten' => ['nullable', 'string', 'max:100'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
             'status' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
             'password' => ['required', 'string', 'min:8'],
             'izin' => ['nullable', 'array'],
@@ -59,6 +65,13 @@ final class PenggunaController extends Controller
             'nama' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email'],
             'role' => ['required', Rule::in(array_column(Role::cases(), 'value'))],
+            'rt' => ['nullable', 'string', 'max:5'],
+            'rw' => ['nullable', 'string', 'max:5'],
+            'desa' => ['nullable', 'string', 'max:100'],
+            'kode_pos' => ['nullable', 'string', 'max:10'],
+            'kecamatan' => ['nullable', 'string', 'max:100'],
+            'kabupaten' => ['nullable', 'string', 'max:100'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
             'status' => ['required', Rule::in(['Aktif', 'Nonaktif'])],
             'password' => ['nullable', 'string', 'min:8'],
             'izin' => ['nullable', 'array'],

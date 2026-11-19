@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Domain\IdentityAccess\ValueObjects;
 
 use App\Domain\IdentityAccess\Enums\Aksi;
@@ -15,8 +14,8 @@ final readonly class IzinMatrix
     {
         $normalized = [];
         foreach (MenuKey::cases() as $menu) {
-            $item = $rawMatrix[$menu->value] ?? [];
-            $edit = (bool) ($item['edit'] ?? false);
+            $item  = $rawMatrix[$menu->value] ?? [];
+            $edit  = (bool) ($item['edit'] ?? false);
             $hapus = (bool) ($item['hapus'] ?? false);
             $lihat = (bool) ($item['lihat'] ?? false);
 
@@ -24,20 +23,20 @@ final readonly class IzinMatrix
             if ($edit || $hapus) {
                 $lihat = true;
             }
-            if (!$lihat) {
-                $edit = false;
+            if (! $lihat) {
+                $edit  = false;
                 $hapus = false;
             }
 
             $normalized[$menu->value] = [
                 'lihat' => $lihat,
-                'edit' => $edit,
+                'edit'  => $edit,
                 'hapus' => $hapus,
             ];
         }
 
-        // Invariant: Ketua RT tidak boleh terkunci dari menu Pengguna
-        if ($role === Role::KETUA_RT) {
+        // Invariant: Ketua RT & Ketua RW tidak boleh terkunci dari menu Pengguna
+        if (in_array($role, [Role::KETUA_RT, Role::KETUA_RW], true)) {
             $normalized[MenuKey::PENGGUNA->value] = ['lihat' => true, 'edit' => true, 'hapus' => true];
         }
 
@@ -46,29 +45,28 @@ final readonly class IzinMatrix
 
     public static function presetFor(Role $role): self
     {
-        $kosong = ['lihat' => false, 'edit' => false, 'hapus' => false];
-        $baca = ['lihat' => true, 'edit' => false, 'hapus' => false];
+        $baca      = ['lihat' => true, 'edit' => false, 'hapus' => false];
         $lihatEdit = ['lihat' => true, 'edit' => true, 'hapus' => false];
-        $penuh = ['lihat' => true, 'edit' => true, 'hapus' => true];
+        $penuh     = ['lihat' => true, 'edit' => true, 'hapus' => true];
 
         $preset = match ($role) {
-            Role::KETUA_RT => [
-                'dashboard' => $baca, 'warga' => $lihatEdit, 'organisasi' => $penuh,
-                'kegiatan' => $penuh, 'kas' => $baca, 'iuran' => $baca,
-                'pengumuman' => $penuh, 'laporan' => $baca, 'pengaturan' => $penuh,
-                'pengguna' => $penuh,
+            Role::KETUA_RT, Role::KETUA_RW => [
+                'dashboard'  => $baca, 'warga'    => $lihatEdit, 'organisasi' => $penuh,
+                'kegiatan'   => $penuh, 'kas'     => $baca, 'iuran'           => $baca,
+                'pengumuman' => $penuh, 'laporan' => $baca, 'pengaturan'      => $penuh,
+                'pengguna'   => $penuh,
             ],
             Role::SEKRETARIS => [
-                'dashboard' => $baca, 'warga' => $penuh, 'organisasi' => $penuh,
-                'kegiatan' => $penuh, 'pengumuman' => $penuh, 'kas' => $baca,
-                'laporan' => $baca,
+                'dashboard' => $baca, 'warga'       => $penuh, 'organisasi' => $penuh,
+                'kegiatan'  => $penuh, 'pengumuman' => $penuh, 'kas'        => $baca,
+                'laporan'   => $baca,
             ],
-            Role::BENDAHARA => [
+            Role::BENDAHARA  => [
                 'dashboard' => $baca, 'kegiatan' => $baca, 'kas' => $penuh,
-                'iuran' => $penuh, 'laporan' => $baca,
+                'iuran'     => $penuh, 'laporan' => $baca,
             ],
-            Role::ADMIN => array_fill_keys(
-                array_map(fn (MenuKey $m) => $m->value, MenuKey::cases()),
+            Role::ADMIN      => array_fill_keys(
+                array_map(fn(MenuKey $m) => $m->value, MenuKey::cases()),
                 $penuh
             ),
         };

@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Domain\IdentityAccess\Enums\Role;
@@ -22,40 +21,54 @@ class DatabaseSeeder extends Seeder
     {
         $password = Hash::make('password123');
 
+        User::updateOrCreate(
+            ['email' => 'ketuarw08@sirutawa.id'],
+            [
+                'nama'     => 'H. Ahmad Sudrajat',
+                'password' => Hash::make('password123'),
+                'role'     => Role::KETUA_RW->value,
+                'rt'       => null,
+                'rw'       => '08',
+                'desa'     => 'Desa Sukadami',
+                'status'   => 'Aktif',
+                'izin'     => IzinMatrix::presetFor(Role::KETUA_RW)->toArray(),
+            ]
+        );
+
         User::create([
-            'nama' => 'Budi Santoso',
-            'email' => 'ketua@rt01.test',
+            'nama'     => 'Budi Santoso',
+            'email'    => 'ketua@rt01.test',
             'password' => $password,
-            'role' => Role::KETUA_RT->value,
-            'status' => 'Aktif',
-            'izin' => IzinMatrix::presetFor(Role::KETUA_RT)->toArray(),
+            'role'     => Role::KETUA_RT->value,
+            'status'   => 'Aktif',
+            'izin'     => IzinMatrix::presetFor(Role::KETUA_RT)->toArray(),
         ]);
 
         User::create([
-            'nama' => 'Citra Lestari',
-            'email' => 'sekretaris@rt01.test',
+            'nama'     => 'Citra Lestari',
+            'email'    => 'sekretaris@rt01.test',
             'password' => $password,
-            'role' => Role::SEKRETARIS->value,
-            'status' => 'Aktif',
-            'izin' => IzinMatrix::presetFor(Role::SEKRETARIS)->toArray(),
+            'role'     => Role::SEKRETARIS->value,
+            'status'   => 'Aktif',
+            'izin'     => IzinMatrix::presetFor(Role::SEKRETARIS)->toArray(),
         ]);
 
         User::create([
-            'nama' => 'Dewi Sartika',
-            'email' => 'bendahara@rt01.test',
+            'nama'     => 'Dewi Sartika',
+            'email'    => 'bendahara@rt01.test',
             'password' => $password,
-            'role' => Role::BENDAHARA->value,
-            'status' => 'Aktif',
-            'izin' => IzinMatrix::presetFor(Role::BENDAHARA)->toArray(),
+            'role'     => Role::BENDAHARA->value,
+            'status'   => 'Aktif',
+            'izin'     => IzinMatrix::presetFor(Role::BENDAHARA)->toArray(),
         ]);
 
         User::create([
-            'nama' => 'Admin Sistem',
-            'email' => 'admin@rt01.test',
+            'nama'     => 'Admin Sistem',
+            'email'    => 'admin@rt01.test',
             'password' => $password,
-            'role' => Role::ADMIN->value,
-            'status' => 'Aktif',
-            'izin' => IzinMatrix::presetFor(Role::ADMIN)->toArray(),
+            'role'     => Role::ADMIN->value,
+            'status'   => 'Aktif',
+            'izin'     => IzinMatrix::presetFor(Role::ADMIN)->toArray(),
         ]);
 
         $w1 = Warga::create(['nama' => 'Ahmad Fauzi', 'nik' => '3216011001900001', 'blok' => 'A/01', 'status' => 'Tetap', 'is_kepala_keluarga' => true]);
@@ -77,52 +90,52 @@ class DatabaseSeeder extends Seeder
 
         // Kegiatan dengan waktu, estimasi, biaya_aktual, & deskripsi
         Kegiatan::create([
-            'judul' => 'Kerja Bakti Lingkungan',
-            'kategori' => 'Kerja Bakti',
-            'status' => 'Planning',
-            'tanggal' => '2026-11-02',
-            'waktu' => '07.00',
-            'lokasi' => 'Lapangan RT',
-            'estimasi' => 500000,
+            'judul'        => 'Kerja Bakti Lingkungan',
+            'kategori'     => 'Kerja Bakti',
+            'status'       => 'Planning',
+            'tanggal'      => '2026-11-02',
+            'waktu'        => '07.00',
+            'lokasi'       => 'Lapangan RT',
+            'estimasi'     => 500000,
             'biaya_aktual' => 0,
             'tampil_warga' => true,
-            'deskripsi' => 'Kegiatan kerja bakti rutin untuk membersihkan saluran air dan lingkungan sekitar RT 01.',
+            'deskripsi'    => 'Kegiatan kerja bakti rutin untuk membersihkan saluran air dan lingkungan sekitar RT 01.',
         ]);
         Kegiatan::create([
-            'judul' => 'Rapat Bulanan Warga',
-            'kategori' => 'Rapat',
-            'status' => 'Berjalan',
-            'tanggal' => '2026-11-08',
-            'waktu' => '19.30',
-            'lokasi' => 'Balai Warga',
-            'estimasi' => 250000,
+            'judul'        => 'Rapat Bulanan Warga',
+            'kategori'     => 'Rapat',
+            'status'       => 'Berjalan',
+            'tanggal'      => '2026-11-08',
+            'waktu'        => '19.30',
+            'lokasi'       => 'Balai Warga',
+            'estimasi'     => 250000,
             'biaya_aktual' => 150000,
             'tampil_warga' => true,
-            'deskripsi' => 'Pembahasan laporan kas bulanan dan agenda keamanan lingkungan.',
+            'deskripsi'    => 'Pembahasan laporan kas bulanan dan agenda keamanan lingkungan.',
         ]);
         Kegiatan::create([
-            'judul' => 'Pengajian Bersama',
-            'kategori' => 'Keagamaan',
-            'status' => 'Planning',
-            'tanggal' => '2026-11-15',
-            'waktu' => '20.00',
-            'lokasi' => 'Musala RW 08',
-            'estimasi' => 150000,
+            'judul'        => 'Pengajian Bersama',
+            'kategori'     => 'Keagamaan',
+            'status'       => 'Planning',
+            'tanggal'      => '2026-11-15',
+            'waktu'        => '20.00',
+            'lokasi'       => 'Musala RW 08',
+            'estimasi'     => 150000,
             'biaya_aktual' => 0,
             'tampil_warga' => true,
-            'deskripsi' => 'Pengajian rutin bulanan warga RT 01 / RW 08.',
+            'deskripsi'    => 'Pengajian rutin bulanan warga RT 01 / RW 08.',
         ]);
         Kegiatan::create([
-            'judul' => 'Peringatan HUT RI',
-            'kategori' => 'Acara',
-            'status' => 'Selesai',
-            'tanggal' => '2026-08-17',
-            'waktu' => '08.00',
-            'lokasi' => 'Lapangan Utama',
-            'estimasi' => 2500000,
+            'judul'        => 'Peringatan HUT RI',
+            'kategori'     => 'Acara',
+            'status'       => 'Selesai',
+            'tanggal'      => '2026-08-17',
+            'waktu'        => '08.00',
+            'lokasi'       => 'Lapangan Utama',
+            'estimasi'     => 2500000,
             'biaya_aktual' => 2450000,
             'tampil_warga' => true,
-            'deskripsi' => 'Lomba rakyat dan malam tirakatan warga RT 01.',
+            'deskripsi'    => 'Lomba rakyat dan malam tirakatan warga RT 01.',
         ]);
         TransaksiKas::create(['tanggal' => '2026-10-28', 'ket' => 'Iuran Warga Oktober', 'kategori' => 'Iuran Warga', 'tipe' => 'masuk', 'nominal' => 2800000]);
         TransaksiKas::create(['tanggal' => '2026-10-25', 'ket' => 'Kebersihan Lingkungan', 'kategori' => 'Kebersihan', 'tipe' => 'keluar', 'nominal' => 350000]);
@@ -130,25 +143,25 @@ class DatabaseSeeder extends Seeder
 
         foreach (['Agu', 'Sep', 'Okt'] as $bln) {
             IuranPembayaran::create([
-                'warga_id' => $w1->id,
-                'tahun' => 2026,
-                'bulan' => $bln,
-                'status' => 'Lunas',
-                'keamanan' => 50000,
-                'kebersihan' => 30000,
-                'kas_rt' => 20000,
+                'warga_id'      => $w1->id,
+                'tahun'         => 2026,
+                'bulan'         => $bln,
+                'status'        => 'Lunas',
+                'keamanan'      => 50000,
+                'kebersihan'    => 30000,
+                'kas_rt'        => 20000,
                 'tanggal_bayar' => now(),
             ]);
         }
         foreach (['Agu', 'Sep'] as $bln) {
             IuranPembayaran::create([
-                'warga_id' => $w2->id,
-                'tahun' => 2026,
-                'bulan' => $bln,
-                'status' => 'Lunas',
-                'keamanan' => 50000,
-                'kebersihan' => 30000,
-                'kas_rt' => 20000,
+                'warga_id'      => $w2->id,
+                'tahun'         => 2026,
+                'bulan'         => $bln,
+                'status'        => 'Lunas',
+                'keamanan'      => 50000,
+                'kebersihan'    => 30000,
+                'kas_rt'        => 20000,
                 'tanggal_bayar' => now(),
             ]);
         }
@@ -157,7 +170,7 @@ class DatabaseSeeder extends Seeder
         Pengumuman::create(['judul' => 'Iuran Oktober Segera Jatuh Tempo', 'isi' => 'Mohon segera melunasi iuran bulanan kepada Bendahara RT.', 'tanggal' => '2026-10-24', 'status' => 'Draf']);
 
         Pengaturan::create([
-            'sapaan' => 'Selamat siang, Warga',
+            'sapaan'       => 'Selamat siang, Warga',
             'header_image' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800',
         ]);
 
